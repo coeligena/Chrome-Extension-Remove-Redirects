@@ -38,11 +38,11 @@ query = [
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="location.replace("]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="location.reload("]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="location.assign("]'
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="openUrl("]'                                          /* quora.com                             */
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("]):not([onclick]):not([onmousedown]):not([jsaction])[href^="/url?q="]:not([done-remove-redirects])'     /* Google with no JavaScript URL - must be verified to be Google, using '.href'  --  this is special case, and a little bit wastefull, since I KNOW there is NO onclick,onmousedown(etc..) handles due to it is being in no javascript page, but to make the entire code at here more unified- I WILL STILL include this specific case as if it is still required to be handled-cleaned.. */
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[data-url]:not([data-url=""]):not([done-remove-redirects])'                      /* twitter/instagram links ("t.co"/) links   */
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[data-expanded-url]:not([data-expanded-url=""]):not([done-remove-redirects])'   
-].join(', ');
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="openUrl("]'                                                   /* quora.com                             */
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("]):not([onclick]):not([onmousedown]):not([jsaction])[href^="/url?q="]'     /* Google with no JavaScript URL - must be verified to be Google, using '.href'  --  this is special case, and a little bit wastefull, since I KNOW there is NO onclick,onmousedown(etc..) handles due to it is being in no javascript page, but to make the entire code at here more unified- I WILL STILL include this specific case as if it is still required to be handled-cleaned.. */
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[data-url]:not([data-url=""])'                                           /* twitter/instagram links ("t.co"/) links   */
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[data-expanded-url]:not([data-expanded-url=""])'   
+].join(':not([done-remove-redirects]),') + ":not([done-remove-redirects])"/*for last one*/;
 
 
 function for_twitter(element){

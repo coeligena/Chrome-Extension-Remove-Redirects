@@ -15,14 +15,11 @@
 
 <img src="resources/screenshot_6.png"/>
 
-<hr/>
-
-###If You Like It, Show It, <a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=7994YX29444PA&amp;lc=US&amp;item_name=Elad%20Karako&amp;item_number=stackoverflow%2dcoffee%2dicon&amp;amount=0%2e50&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted" rel="nofollow">By A Small Donation Using PayPal</a>. Thank You.
-
-<hr/>
-
-```
+<pre>
 Developer's HUB / Changelog
+
+1.9.1.6
+* engine update - improve discovery.
 
 1.9.1.5
 + error handling
@@ -105,4 +102,6 @@ Developer's HUB / Changelog
 1.3.0.1
 + basic Google-Search redirect events cleanup.
 + header modification to allow running cleanup on every page.
-```
+</pre>
+
+<sub><a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=7994YX29444PA&amp;lc=US&amp;item_name=Elad%20Karako&amp;item_number=stackoverflow%2dcoffee%2dicon&amp;amount=0%2e50&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted" rel="nofollow">PayPal Donation 🙏︎</a></sub>
