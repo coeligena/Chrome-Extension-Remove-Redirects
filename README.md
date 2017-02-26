@@ -18,7 +18,7 @@
 <pre>
 Developer's HUB / Changelog
 
-1.9.2.4
+1.9.2.5
 * engine improve query: ignore invalid elements with href that is not a real-url (such as onces starting with 'javascript:').
 
 1.9.2.3
