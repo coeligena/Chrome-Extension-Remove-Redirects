@@ -18,6 +18,14 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.2.3
++ get disqus direct links.
+* engine updates: specific target only 'A' elements ignoring other elements with href attributes.
+* typo fix: handle correct cloned elements on the bonus unhook events part.
+* engine improve query, shorten repeating part putting it in a 'glue' variable.
+* engine update: flag rename from 'done-remove-redirects' to 'done-removeredirects' convention.
+* engine update: always use flag 'done-removeredirects', which makes sure element handled once, only new elements rediscovered (which means javascript re-modified elements might not re-cured.. :/ but it will make the overall engine quicker to discover only new stuff!!).
+
 1.9.1.6
 * engine update - improve discovery.
 
