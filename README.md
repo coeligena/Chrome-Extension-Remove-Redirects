@@ -18,6 +18,9 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.2.4
+* engine improve query: ignore invalid elements with href that is not a real-url (such as onces starting with 'javascript:').
+
 1.9.2.3
 + get disqus direct links.
 * engine updates: specific target only 'A' elements ignoring other elements with href attributes.

@@ -48,7 +48,7 @@ query = (function(array,glue){
           , 'a[href][data-expanded-url]:not([data-expanded-url=""])'   
           ]
           ,
-          ':not([href=""]):not([href^="#"]):not([href^="void("]):not([done-removeredirects])'
+          ':not([href=""]):not([href^="#"]):not([href^="void("]):not([href^="javascript:"]):not([done-removeredirects])'
         ));
 
 
