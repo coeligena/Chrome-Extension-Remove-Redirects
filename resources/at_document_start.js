@@ -41,10 +41,11 @@ query = (function(array,glue){
           , 'a[href][onclick*="location.replace("]'
           , 'a[href][onclick*="location.reload("]'
           , 'a[href][onclick*="location.assign("]'
-          , 'a[href][onclick*="openUrl("]'                                                   /* quora.com                             */
-          , 'a[href]:not([onclick]):not([onmousedown]):not([jsaction])[href^="/url?q="]'     /* Google with no JavaScript URL - must be verified to be Google, using '.href'  --  this is special case, and a little bit wastefull, since I KNOW there is NO onclick,onmousedown(etc..) handles due to it is being in no javascript page, but to make the entire code at here more unified- I WILL STILL include this specific case as if it is still required to be handled-cleaned.. */
-          , 'a[href][href*="disq.us/url"][href*="url="]'                                     /* disqus redirect */
-          , 'a[href][data-url]:not([data-url=""])'                                           /* twitter/instagram links ("t.co"/) links   */
+          , 'a[href][onclick*="openUrl("]'                                                     /* quora.com                             */
+          , 'a[href]:not([onclick]):not([onmousedown]):not([jsaction])[href^="/url?q="]'       /* Google with no JavaScript URL - must be verified to be Google, using '.href'  --  this is special case, and a little bit wastefull, since I KNOW there is NO onclick,onmousedown(etc..) handles due to it is being in no javascript page, but to make the entire code at here more unified- I WILL STILL include this specific case as if it is still required to be handled-cleaned.. */
+          , 'a[href][data-saferedirecturl]'                                                    /* gmail redirect on links - NOT SURE IT IS A GOOD IDEA TO REMOVE IT... :/ */
+          , 'a[href][href*="disq.us/url"][href*="url="]'                                       /* disqus redirect */
+          , 'a[href][data-url]:not([data-url=""])'                                             /* twitter/instagram links ("t.co"/) links   */
           , 'a[href][data-expanded-url]:not([data-expanded-url=""])'   
           ]
           ,
@@ -52,6 +53,13 @@ query = (function(array,glue){
         ));
 
 
+function unhook_all_events_by_clone(element){ "use strict";
+  var tmp;
+  tmp = element.cloneNode(true);                        //unhook all events! (only if page has javascript support)
+  element.parentNode.replaceChild(tmp, element);
+  element = tmp;
+  return element;
+}
 
 function for_twitter(element){ "use strict";
   var tmp;
@@ -62,7 +70,6 @@ function for_twitter(element){ "use strict";
   tmp = null;
 }
 
-
 function for_google_nojs(element){ "use strict";
   var tmp;
   tmp = element.href.match(/\/\/www\.google\.[^\/]+\/url\?q\=([^\&]+)/i);                   /* Google page (redirects with no javascript)*/
@@ -71,6 +78,11 @@ function for_google_nojs(element){ "use strict";
   tmp = decodeURIComponent(tmp);
   element.setAttribute("href", tmp); /* hard overwrite */
   tmp = null;
+}
+
+function for_datasaferedirect(element){ "use strict";
+  if(null === element.getAttribute("data-saferedirecturl")) return;
+  element.removeAttribute("data-saferedirecturl");
 }
 
 function for_disqus(element){ "use strict";
@@ -98,19 +110,19 @@ function action(){ "use strict";
     element.removeAttribute("onclick");
     for_twitter(element);
     for_google_nojs(element);
+    for_datasaferedirect(element);
     for_disqus(element);
 
     setTimeout(function(){
       var tmp;
-      tmp = element.cloneNode(true);                        //unhook all events! (only if page has javascript support)
-      element.parentNode.replaceChild(tmp, element);
+      tmp = unhook_all_events_by_clone(element);
       tmp.removeAttribute("onmousedown");                   /* must be redo since cloneNode will get the unmodified version of the node from the initial-HTML-source, attributes included.. */
       tmp.removeAttribute("jsaction");
       tmp.removeAttribute("onclick");
       for_twitter(tmp);
       for_google_nojs(tmp);
+      for_datasaferedirect(element);
       for_disqus(tmp);
-      tmp = null;
     }, 50);
   });
 }

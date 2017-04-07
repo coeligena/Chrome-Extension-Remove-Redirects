@@ -18,6 +18,9 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.2.7
+* added more Google redirects, using 'data-saferedirecturl', I might be reverting this one since it is used in gmail, and might actually be a valid way of protection, but then again so is proper antivirus, using opendns/google-dns and applying common-sense, so google do not have a valid point, ..really.. of modifying links in one's emails' body..
+
 1.9.2.5
 * engine improve query: ignore invalid elements with href that is not a real-url (such as onces starting with 'javascript:').
 
