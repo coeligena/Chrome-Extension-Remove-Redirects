@@ -47,6 +47,9 @@ query = (function(array,glue){
           , 'a[href][href*="disq.us/url"][href*="url="]'                                       /* disqus redirect */
           , 'a[href][data-url]:not([data-url=""])'                                             /* twitter/instagram links ("t.co"/) links   */
           , 'a[href][data-expanded-url]:not([data-expanded-url=""])'   
+          , 'a[href^="/out/"][href*="u="]'                                                     /* generic PHP-out redirect plugins           */
+
+          , 'a[href*="utm_"]'                                                                  /* generic behavioural tracking */
           ]
           ,
           ':not([href=""]):not([href^="#"]):not([href^="void("]):not([href^="javascript:"]):not([done-removeredirects])'
@@ -87,12 +90,32 @@ function for_datasaferedirect(element){ "use strict";
 
 function for_disqus(element){ "use strict";
   var tmp;
-  tmp = element.search.match(/url\=([^\&\^]+)/);                                          /* disqus redirect links */
+  tmp = element.search.match(/url\=([^\&\^]+)/i);                                         /* disqus redirect links */
   if(null === tmp || "string" !== typeof tmp[1]) return;
   tmp = tmp[1];
   tmp = decodeURIComponent(tmp);
   element.setAttribute("href", tmp); /* hard overwrite */
   tmp = null;
+}
+
+function for_php_outplugin(element){ "use strict";
+  var tmp;
+  tmp = element.getAttribute("href").match(/u=([^\&]+)/i);
+  if(null === tmp || "string" !== typeof tmp[1]) return;
+  tmp = tmp[1];
+  tmp = decodeURIComponent(tmp);
+  element.setAttribute("href", tmp); /* hard overwrite */
+  tmp = null;
+}
+
+function remove_utm_tracking(element){ "use strict";
+  var tmp;
+  tmp = element.getAttribute("href");
+  if(-1 === tmp.indexOf("utm_")) return; //no need to do anything.
+
+  tmp = tmp.replace(/utm_[^\%]+\%3d[^\%\&]+/gi, "").replace(/(\%26)+$/g,""); //when appeared as component.
+  tmp = tmp.replace(/utm_[^\=]+\=[^\%\&]+/gi,   "").replace(/(\&)+$/g,"");   //when appeared as plain-argument.
+  element.setAttribute("href", tmp);
 }
 
 
@@ -112,6 +135,8 @@ function action(){ "use strict";
     for_google_nojs(element);
     for_datasaferedirect(element);
     for_disqus(element);
+    for_php_outplugin(element);
+    remove_utm_tracking(element);
 
     setTimeout(function(){
       var tmp;
@@ -123,6 +148,8 @@ function action(){ "use strict";
       for_google_nojs(tmp);
       for_datasaferedirect(element);
       for_disqus(tmp);
+      for_php_outplugin(element);
+      remove_utm_tracking(element);
     }, 50);
   });
 }

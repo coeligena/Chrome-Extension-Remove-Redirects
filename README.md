@@ -18,6 +18,10 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.3.1
+* improved pattern, to accurately identify and remove generic php-redirect plugin.
++ clean page from behavioural tracking! yeahiiiiii!
+
 1.9.2.7
 * added more Google redirects, using 'data-saferedirecturl', I might be reverting this one since it is used in gmail, and might actually be a valid way of protection, but then again so is proper antivirus, using opendns/google-dns and applying common-sense, so google do not have a valid point, ..really.. of modifying links in one's emails' body..
 
