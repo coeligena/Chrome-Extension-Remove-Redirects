@@ -15,14 +15,29 @@
 
 <img src="resources/screenshot_6.png"/>
 
-<hr/>
-
-###If You Like It, Show It, <a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=7994YX29444PA&amp;lc=US&amp;item_name=Elad%20Karako&amp;item_number=stackoverflow%2dcoffee%2dicon&amp;amount=0%2e50&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted" rel="nofollow">By A Small Donation Using PayPal</a>. Thank You.
-
-<hr/>
-
-```
+<pre>
 Developer's HUB / Changelog
+
+1.9.3.1
+* improved pattern, to accurately identify and remove generic php-redirect plugin.
++ clean page from behavioural tracking! yeahiiiiii!
+
+1.9.2.7
+* added more Google redirects, using 'data-saferedirecturl', I might be reverting this one since it is used in gmail, and might actually be a valid way of protection, but then again so is proper antivirus, using opendns/google-dns and applying common-sense, so google do not have a valid point, ..really.. of modifying links in one's emails' body..
+
+1.9.2.5
+* engine improve query: ignore invalid elements with href that is not a real-url (such as onces starting with 'javascript:').
+
+1.9.2.3
++ get disqus direct links.
+* engine updates: specific target only 'A' elements ignoring other elements with href attributes.
+* typo fix: handle correct cloned elements on the bonus unhook events part.
+* engine improve query, shorten repeating part putting it in a 'glue' variable.
+* engine update: flag rename from 'done-remove-redirects' to 'done-removeredirects' convention.
+* engine update: always use flag 'done-removeredirects', which makes sure element handled once, only new elements rediscovered (which means javascript re-modified elements might not re-cured.. :/ but it will make the overall engine quicker to discover only new stuff!!).
+
+1.9.1.6
+* engine update - improve discovery.
 
 1.9.1.5
 + error handling
@@ -105,4 +120,6 @@ Developer's HUB / Changelog
 1.3.0.1
 + basic Google-Search redirect events cleanup.
 + header modification to allow running cleanup on every page.
-```
+</pre>
+
+<sub><a target="_blank" href="https://paypal.me/e1adkarak0" rel="nofollow"><img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" width="60" height="16" border="0" alt="PayPal Donation"></a></sub>
