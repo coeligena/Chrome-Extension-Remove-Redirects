@@ -16,10 +16,10 @@ query = [
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="rwt("]' // Google
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[jsaction*="mousedown"][jsaction*="keydown"]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="window.open("]' // other (very common)
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="self.open("]' 
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="top.open("]' 
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="parent.open("]' 
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="frames.open("]' 
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="self.open("]'
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="top.open("]'
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="parent.open("]'
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="frames.open("]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*=".href="]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="location="]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="location.href="]'
@@ -28,10 +28,10 @@ query = [
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="location.reload("]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onmousedown*="location.assign("]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="window.open("]' // other (uncommon)
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="self.open("]' 
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="top.open("]' 
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="parent.open("]' 
-, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="frames.open("]' 
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="self.open("]'
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="top.open("]'
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="parent.open("]'
+, '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="frames.open("]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*=".href="]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="location="]'
 , '[href]:not([href=""]):not([href^="#"]):not([href*="void("])[onclick*="location.href="]'
@@ -55,12 +55,14 @@ function for_twitter(element) {
 }
 
 function for_google_nojs(element) {
-  var tmp = element.href.match(/\/\/www\.google\.[^\/]+\/url\?q\=([^\&]+)/i); // Google page (redirects with no JS)
-  if(tmp && typeof tmp[1] === "string") {
-    tmp = tmp[1];
-    tmp = decodeURIComponent(tmp);
-    element.setAttribute("href", tmp); // hard overwrite
-    element.setAttribute("done-remove-redirects", ""); // flag to make sure to avoid infinate loop in-case the real-url also includes "/url?q=" in it
+  if(element.href){
+    var tmp = element.href.match(/\/\/www\.google\.[^\/]+\/url\?q\=([^\&]+)/i); // Google page (redirects with no JS)
+    if(tmp && typeof tmp[1] === "string") {
+      tmp = tmp[1];
+      tmp = decodeURIComponent(tmp);
+      element.setAttribute("href", tmp); // hard overwrite
+      element.setAttribute("done-remove-redirects", ""); // flag to make sure to avoid infinate loop in-case the real-url also includes "/url?q=" in it
+    }
   }
 }
 
