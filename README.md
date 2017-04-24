@@ -1,4 +1,4 @@
-<h1> <img src="resources/icon.png" height="64" width="64"/> Chrome-Extension-Remove-Redirects</h1>
+<h1><img src="resources/icon.png" height="64" width="64"/> Chrome-Extension-Remove-Redirects &nbsp; <sub><a target="_blank" href="https://paypal.me/e1adkarak0" rel="nofollow"><img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" width="60" height="16" border="0" alt="PayPal Donation"></a></sub></h1>
 
 <h2>A Complementary Chrome-Extension For <a href="https://chrome.google.com/webstore/detail/cjpalhdlnbpafiamejdnhcphjbkeiagm">uBlock Origin</a> and <a href="https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom">AdBlock</a></h2>
 
