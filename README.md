@@ -18,6 +18,9 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.3.2
++ error handling
+
 1.9.3.1
 * improved pattern, to accurately identify and remove generic php-redirect plugin.
 + clean page from behavioural tracking! yeahiiiiii!
