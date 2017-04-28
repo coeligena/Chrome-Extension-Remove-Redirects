@@ -18,6 +18,9 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.3.3
+* improved loading.
+
 1.9.3.2
 + error handling
 
