@@ -47,6 +47,7 @@ query = (function(array,glue){
           , 'a[href][data-saferedirecturl]'                                                    /* gmail redirect on links - NOT SURE IT IS A GOOD IDEA TO REMOVE IT... :/ */
           , 'a[href][href*="disq.us/url"][href*="url="]'                                       /* disqus redirect */
           , 'a[href][data-url]:not([data-url=""])'                                             /* twitter/instagram links ("t.co"/) links   */
+          , 'a[href][href*="instagram.com"][href*="u=http"]'                                   /* instagram internal-links*/
           , 'a[href][data-expanded-url]:not([data-expanded-url=""])'   
           , 'a[href^="/out/"][href*="u="]'                                                     /* generic PHP-out redirect plugins           */
 
@@ -73,6 +74,17 @@ function for_twitter(element){ "use strict";
   element.setAttribute("href", tmp);                                                      /* hard overwrite       */
   tmp = null;
 }
+
+function for_instagram_internal_links(element){ "use strict";
+  var tmp;
+  tmp = element.href.match(/instagram\.com\/[^\"\&]*u=([^\&]+)/i);                        /* instagram internal "click" links using useless redirect. */
+  if(null === tmp || "string" !== typeof tmp[1]) return;
+  tmp = tmp[1];
+  tmp = decodeURIComponent(tmp);
+  element.setAttribute("href", tmp); /* hard overwrite */
+  tmp = null;
+}
+
 
 function for_google_nojs(element){ "use strict";
   var tmp;
@@ -144,6 +156,7 @@ function action(){ "use strict";
     element.removeAttribute("jsaction");
     element.removeAttribute("onclick");
     for_twitter(element);
+    for_instagram_internal_links(element);
     for_google_nojs(element);
     for_google_picture_redirect(element);
     for_datasaferedirect(element);
@@ -158,6 +171,7 @@ function action(){ "use strict";
       tmp.removeAttribute("jsaction");
       tmp.removeAttribute("onclick");
       for_twitter(tmp);
+      for_instagram_internal_links(tmp);
       for_google_nojs(tmp);
       for_google_picture_redirect(tmp);
       for_datasaferedirect(element);
