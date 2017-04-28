@@ -18,6 +18,9 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.4.1
++ handling Google picture-redirects redirects, but only clicks, never resource-loading, since Google loads resources through safe HTTPS proxy, which is better- but I CAN FIX "click links".
+
 1.9.3.3
 * improved loading.
 

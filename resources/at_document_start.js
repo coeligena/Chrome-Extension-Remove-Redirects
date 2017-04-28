@@ -17,6 +17,7 @@ query = (function(array,glue){
           [
             'a[href][onmousedown*="rwt("]'                        /* Google              */
           , 'a[href][jsaction*="mousedown"][jsaction*="keydown"]'
+          , 'a[href][href^="/imgres"][href*="imgurl="]'           /* Google Images - only modify link since some images might be from HTTP (not secure location) but Google acts as a secure-image-loading-proxy, but the click is OK to fix. */
           , 'a[href][onmousedown*="window.open("]'                /* other (very common) */
           , 'a[href][onmousedown*="self.open("]' 
           , 'a[href][onmousedown*="top.open("]' 
@@ -83,6 +84,17 @@ function for_google_nojs(element){ "use strict";
   tmp = null;
 }
 
+function for_google_picture_redirect(element){ "use strict";
+  var tmp;
+  tmp = element.getAttribute("href");
+  tmp = tmp.match(/^\/imgres.*imgurl=([^\"\&]+)/i);
+  if(null === tmp || "string" !== typeof tmp[1]) return;
+  tmp = tmp[1];
+  tmp = decodeURIComponent(tmp);
+  element.setAttribute("href", tmp); /* hard overwrite */
+  tmp = null;
+}
+
 function for_datasaferedirect(element){ "use strict";
   if(null === element.getAttribute("data-saferedirecturl")) return;
   element.removeAttribute("data-saferedirecturl");
@@ -133,6 +145,7 @@ function action(){ "use strict";
     element.removeAttribute("onclick");
     for_twitter(element);
     for_google_nojs(element);
+    for_google_picture_redirect(element);
     for_datasaferedirect(element);
     for_disqus(element);
     for_php_outplugin(element);
@@ -146,6 +159,7 @@ function action(){ "use strict";
       tmp.removeAttribute("onclick");
       for_twitter(tmp);
       for_google_nojs(tmp);
+      for_google_picture_redirect(tmp);
       for_datasaferedirect(element);
       for_disqus(tmp);
       for_php_outplugin(element);
