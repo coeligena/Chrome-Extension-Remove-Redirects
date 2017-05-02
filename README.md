@@ -1,4 +1,4 @@
-<h1> <img src="resources/icon.png" height="64" width="64"/> Chrome-Extension-Remove-Redirects</h1>
+<h1><img src="resources/icon.png" height="64" width="64"/> Chrome-Extension-Remove-Redirects &nbsp; <sub><a target="_blank" href="https://paypal.me/e1adkarak0" rel="nofollow"><img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" width="60" height="16" border="0" alt="PayPal Donation"></a></sub></h1>
 
 <h2>A Complementary Chrome-Extension For <a href="https://chrome.google.com/webstore/detail/cjpalhdlnbpafiamejdnhcphjbkeiagm">uBlock Origin</a> and <a href="https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom">AdBlock</a></h2>
 
@@ -17,6 +17,18 @@
 
 <pre>
 Developer's HUB / Changelog
+
+1.9.4.3
++ added support for more instagram links.
+
+1.9.4.1
++ handling Google picture-redirects redirects, but only clicks, never resource-loading, since Google loads resources through safe HTTPS proxy, which is better- but I CAN FIX "click links".
+
+1.9.3.3
+* improved loading.
+
+1.9.3.2
++ error handling
 
 1.9.3.1
 * improved pattern, to accurately identify and remove generic php-redirect plugin.

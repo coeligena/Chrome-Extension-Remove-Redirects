@@ -18,6 +18,7 @@ query = (function(array,glue){
             '[onmousedown*="rc("]' // Yandex
           , 'a[href][onmousedown*="rwt("]'                        /* Google              */
           , 'a[href][jsaction*="mousedown"][jsaction*="keydown"]'
+          , 'a[href][href^="/imgres"][href*="imgurl="]'           /* Google Images - only modify link since some images might be from HTTP (not secure location) but Google acts as a secure-image-loading-proxy, but the click is OK to fix. */
           , 'a[href][onmousedown*="window.open("]'                /* other (very common) */
           , 'a[href][onmousedown*="self.open("]'
           , 'a[href][onmousedown*="top.open("]'
@@ -47,6 +48,7 @@ query = (function(array,glue){
           , 'a[href][data-saferedirecturl]'                                                    /* gmail redirect on links - NOT SURE IT IS A GOOD IDEA TO REMOVE IT... :/ */
           , 'a[href][href*="disq.us/url"][href*="url="]'                                       /* disqus redirect */
           , 'a[href][data-url]:not([data-url=""])'                                             /* twitter/instagram links ("t.co"/) links   */
+          , 'a[href][href*="instagram.com"][href*="u=http"]'                                   /* instagram internal-links*/
           , 'a[href][data-expanded-url]:not([data-expanded-url=""])'
           , 'a[href^="/out/"][href*="u="]'                                                     /* generic PHP-out redirect plugins           */
 
@@ -74,9 +76,31 @@ function for_twitter(element){ "use strict";
   tmp = null;
 }
 
+function for_instagram_internal_links(element){ "use strict";
+  var tmp;
+  tmp = element.href.match(/instagram\.com\/[^\"\&]*u=([^\&]+)/i);                        /* instagram internal "click" links using useless redirect. */
+  if(null === tmp || "string" !== typeof tmp[1]) return;
+  tmp = tmp[1];
+  tmp = decodeURIComponent(tmp);
+  element.setAttribute("href", tmp); /* hard overwrite */
+  tmp = null;
+}
+
+
 function for_google_nojs(element){ "use strict";
   var tmp;
   tmp = element.href.match(/\/\/www\.google\.[^\/]+\/url\?q\=([^\&]+)/i);                   /* Google page (redirects with no javascript)*/
+  if(null === tmp || "string" !== typeof tmp[1]) return;
+  tmp = tmp[1];
+  tmp = decodeURIComponent(tmp);
+  element.setAttribute("href", tmp); /* hard overwrite */
+  tmp = null;
+}
+
+function for_google_picture_redirect(element){ "use strict";
+  var tmp;
+  tmp = element.getAttribute("href");
+  tmp = tmp.match(/^\/imgres.*imgurl=([^\"\&]+)/i);
   if(null === tmp || "string" !== typeof tmp[1]) return;
   tmp = tmp[1];
   tmp = decodeURIComponent(tmp);
@@ -133,7 +157,9 @@ function action(){ "use strict";
     element.removeAttribute("jsaction");
     element.removeAttribute("onclick");
     for_twitter(element);
+    for_instagram_internal_links(element);
     for_google_nojs(element);
+    for_google_picture_redirect(element);
     for_datasaferedirect(element);
     for_disqus(element);
     for_php_outplugin(element);
@@ -146,7 +172,9 @@ function action(){ "use strict";
       tmp.removeAttribute("jsaction");
       tmp.removeAttribute("onclick");
       for_twitter(tmp);
+      for_instagram_internal_links(tmp);
       for_google_nojs(tmp);
+      for_google_picture_redirect(tmp);
       for_datasaferedirect(element);
       for_disqus(tmp);
       for_php_outplugin(element);
@@ -155,6 +183,5 @@ function action(){ "use strict";
   });
 }
 
-
 try{  action();                               }catch(err){}
-try{  interval_id = setInterval(action, 500); }catch(err){ clearInterval(interval_id); }      /*only available in pages having JavaScript support*/
+try{  interval_id = setInterval(action, 250); }catch(err){ clearInterval(interval_id); }  //Only available in pages having JavaScript support.
