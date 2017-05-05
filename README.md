@@ -18,6 +18,9 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.4.5
+* improved fixing of protocol-less urls in data-url attributes.
+
 1.9.4.4
 * improved uneascape leftovers.
 

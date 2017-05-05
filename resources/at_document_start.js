@@ -68,10 +68,13 @@ function unhook_all_events_by_clone(element){ "use strict";
 
 function for_twitter(element){ "use strict";
   var tmp;
-  tmp = element.getAttribute("data-url") || element.getAttribute("data-expanded-url");      /* twitter instagram pages*/
+  tmp = element.getAttribute("data-url") || element.getAttribute("data-expanded-url");      // twitter instagram pages
   if(null === tmp) return;
-  tmp = (-1 === tmp.indexOf(":") ? "http://" : "") + tmp;                                 /* fix missing protocol */
-  element.setAttribute("href", tmp);                                                      /* hard overwrite       */
+
+  tmp =  0 === tmp.indexOf("/") ? tmp :                                                    //  no need to fix missing protocol.
+        -1 === tmp.indexOf(":") ? ("http://" + tmp).replace("////","//") : tmp;            //  fix missing protocol.
+
+  element.setAttribute("href", tmp);
   tmp = null;
 }
 
