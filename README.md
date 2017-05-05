@@ -18,6 +18,9 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.4.4
+* improved uneascape leftovers.
+
 1.9.4.3
 + added support for more instagram links.
 

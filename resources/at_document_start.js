@@ -110,6 +110,7 @@ function for_google_picture_redirect(element){ "use strict";
 function for_datasaferedirect(element){ "use strict";
   if(null === element.getAttribute("data-saferedirecturl")) return;
   element.removeAttribute("data-saferedirecturl");
+  element.setAttribute("href", element.getAttribute("href").replace(/\&amp\;/gi, "&"));
 }
 
 function for_disqus(element){ "use strict";
