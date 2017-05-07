@@ -47,6 +47,7 @@ query = (function(array,glue){
           , 'a[href]:not([onclick]):not([onmousedown]):not([jsaction])[href^="/url?q="]'       /* Google with no JavaScript URL - must be verified to be Google, using '.href'  --  this is special case, and a little bit wastefull, since I KNOW there is NO onclick,onmousedown(etc..) handles due to it is being in no javascript page, but to make the entire code at here more unified- I WILL STILL include this specific case as if it is still required to be handled-cleaned.. */
           , 'a[href][data-saferedirecturl]'                                                    /* gmail redirect on links - NOT SURE IT IS A GOOD IDEA TO REMOVE IT... :/ */
           , 'a[href][href*="disq.us/url"][href*="url="]'                                       /* disqus redirect */
+          , 'a[href*="t.co"][class^="_"]'                                                      /* 5% of URLs used in twitter does not include the real url, but they are hinted using ` > span[aria-hidden*="true"]` with content that looks like `(link: http://www.something.com)` (that sits in a hidden container used in aria taging), for example: `<a class="_1rTfukg4 _3fUfiuOH" href="http://t.co/yi6zEYtL6J?amp=1" rel="noopener noreferrer nofollow" target="_blank"><span aria-hidden="true" class="_1piKw1fp">(link: http://connect.mit.edu) </span>`
           , 'a[href][data-url]:not([data-url=""])'                                             /* twitter/instagram links ("t.co"/) links   */
           , 'a[href][href*="instagram.com"][href*="u=http"]'                                   /* instagram internal-links*/
           , 'a[href][data-expanded-url]:not([data-expanded-url=""])'
@@ -69,10 +70,49 @@ function unhook_all_events_by_clone(element){ "use strict";
 
 function for_twitter(element){ "use strict";
   var tmp;
-  tmp = element.getAttribute("data-url") || element.getAttribute("data-expanded-url");      /* twitter instagram pages*/
+  tmp = element.getAttribute("data-url") || element.getAttribute("data-expanded-url");      // twitter instagram pages
   if(null === tmp) return;
-  tmp = (-1 === tmp.indexOf(":") ? "http://" : "") + tmp;                                 /* fix missing protocol */
-  element.setAttribute("href", tmp);                                                      /* hard overwrite       */
+
+  tmp =  0 === tmp.indexOf("/") ? tmp :                                                    //  no need to fix missing protocol.
+        -1 === tmp.indexOf(":") ? ("http://" + tmp).replace("////","//") : tmp;            //  fix missing protocol.
+
+  element.setAttribute("href", tmp);
+  tmp = null;
+}
+
+function for_hinted_in_text(element){ "use strict";  //very risky! should be no child-elements + pure URL-like text content + text-cotent no whitespace! - for not limit to t.co links and limit to twitter only! + probably should include a-z and at-least one '.' character + url is usually in small-case, so if there is something in large-case it is probably not URL.
+  var tmp;
+
+  if(-1 === window.location.hostname.indexOf("twitter.com"))                             return; //limit to twitter domain only.
+  if(-1 === element.hostname.indexOf("t.co"))                                            return; //limit to t.co links only
+
+  if("number" !==  typeof element.childElementCount || element.childElementCount > 0)    return; //heuristics: kick - if there are any child-elements (only text-nodes allowed).
+  if(element.innerText !== element.innerText.toLowerCase())                              return; //heuristics: kick - there is a content in upper-case (since urls is mostly lower-case.
+  if(true === /\s+/.test(element.innerText))                                             return; //heuristics: kick - if there is whitespace anywhere.
+  if(true === /^[^\.]+$/.test(element.innerText))                                        return; //heuristics: kick - if no '.' dot character exist
+
+  tmp = element.innerText;
+  tmp =  0 === tmp.indexOf("/") ? tmp :                                                    //  no need to fix missing protocol.
+        -1 === tmp.indexOf(":") ? ("http://" + tmp).replace("////","//") : tmp;            //  fix missing protocol.
+
+  element.setAttribute("href", tmp);
+  tmp = null;
+}
+
+
+function for_hinted_in_aria_hidden(element){ "use strict";
+  var tmp = element.querySelector('[aria-hidden*="true"]');
+  if(null === tmp) return;
+  
+  tmp = tmp.innerText.match(/\(\s*link\s*\:\s* ([^\s\)]+)\s*\)/i);
+  if(null === tmp || "undefined" === typeof tmp[1]) return;
+
+  tmp = tmp[1];
+
+  tmp =  0 === tmp.indexOf("/") ? tmp :                                                    //  no need to fix missing protocol.
+        -1 === tmp.indexOf(":") ? ("http://" + tmp).replace("////","//") : tmp;            //  fix missing protocol.
+
+  element.setAttribute("href", tmp);
   tmp = null;
 }
 
@@ -111,6 +151,7 @@ function for_google_picture_redirect(element){ "use strict";
 function for_datasaferedirect(element){ "use strict";
   if(null === element.getAttribute("data-saferedirecturl")) return;
   element.removeAttribute("data-saferedirecturl");
+  element.setAttribute("href", element.getAttribute("href").replace(/\&amp\;/gi, "&"));
 }
 
 function for_disqus(element){ "use strict";
@@ -157,6 +198,8 @@ function action(){ "use strict";
     element.removeAttribute("jsaction");
     element.removeAttribute("onclick");
     for_twitter(element);
+    for_hinted_in_aria_hidden(element);
+    for_hinted_in_text(element);
     for_instagram_internal_links(element);
     for_google_nojs(element);
     for_google_picture_redirect(element);
@@ -172,6 +215,8 @@ function action(){ "use strict";
       tmp.removeAttribute("jsaction");
       tmp.removeAttribute("onclick");
       for_twitter(tmp);
+      for_hinted_in_aria_hidden(element);
+      for_hinted_in_text(element);
       for_instagram_internal_links(tmp);
       for_google_nojs(tmp);
       for_google_picture_redirect(tmp);

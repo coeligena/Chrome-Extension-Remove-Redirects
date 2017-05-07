@@ -18,6 +18,18 @@
 <pre>
 Developer's HUB / Changelog
 
+1.9.4.8
++ added heuristics/patterns for real-url, hinted in the text-content. since it is very risky it is for now only limited to t.co/ links in twitter.com domains.
+
+1.9.4.7
++ more patterns for twitter-links heuristics :]
+
+1.9.4.5
+* improved fixing of protocol-less urls in data-url attributes.
+
+1.9.4.4
+* improved uneascape leftovers.
+
 1.9.4.3
 + added support for more instagram links.
 
